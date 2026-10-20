@@ -1,0 +1,57 @@
+<section class="flex max-w-2xl flex-col gap-4">
+  <h1 class="m-0" i18n="@@tickets.create.title">New ticket</h1>
+
+  <form class="flex flex-col gap-2" [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label i18n="@@tickets.create.titleLabel">Title</mat-label>
+      <input matInput formControlName="title" />
+      <mat-error>{{ fieldError(form.controls.title) }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label i18n="@@tickets.create.descriptionLabel">Description</mat-label>
+      <textarea matInput formControlName="description" rows="6"></textarea>
+      <mat-hint align="end">{{ form.controls.description.value.length }} / {{ descriptionMaxLength }}</mat-hint>
+      <mat-error>{{ fieldError(form.controls.description) }}</mat-error>
+    </mat-form-field>
+
+    <div class="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
+      <mat-form-field>
+        <mat-label i18n="@@tickets.create.priorityLabel">Priority</mat-label>
+        <mat-select formControlName="priority">
+          @for (priority of priorities; track priority) {
+            <mat-option [value]="priority">{{ priorityLabel(priority) }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>{{ fieldError(form.controls.priority) }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label i18n="@@tickets.create.categoryLabel">Category</mat-label>
+        <mat-select formControlName="category">
+          @for (category of categories; track category) {
+            <mat-option [value]="category">{{ categoryLabel(category) }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>{{ fieldError(form.controls.category) }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field>
+      <mat-label i18n="@@tickets.create.requesterLabel">Requester</mat-label>
+      <mat-select formControlName="requesterId">
+        @for (person of persons(); track person.id) {
+          <mat-option [value]="person.id">{{ personLabel(person) }}</mat-option>
+        }
+      </mat-select>
+      <mat-error>{{ fieldError(form.controls.requesterId) }}</mat-error>
+    </mat-form-field>
+
+    <div class="flex gap-2">
+      <button mat-flat-button type="submit" [disabled]="submitting()" i18n="@@tickets.create.createButton">
+        Create
+      </button>
+      <a mat-button routerLink="/tickets" i18n="@@tickets.create.cancelButton">Cancel</a>
+    </div>
+  </form>
+</section>

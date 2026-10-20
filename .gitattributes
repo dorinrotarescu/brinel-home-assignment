@@ -1,0 +1,9 @@
+# Normalize line endings for all text files
+* text=auto eol=lf
+
+# Shell scripts must keep LF so they run on macOS/Linux
+mvnw text eol=lf
+*.sh text eol=lf
+
+# Windows command scripts must keep CRLF
+*.cmd text eol=crlf

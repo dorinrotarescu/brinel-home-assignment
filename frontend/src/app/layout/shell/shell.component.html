@@ -1,0 +1,13 @@
+<mat-toolbar class="gap-4">
+  <a routerLink="/tickets" class="text-inherit no-underline" i18n="@@layout.shell.appName">Acme Helpdesk</a>
+  <a mat-button routerLink="/tickets" i18n="@@layout.shell.ticketsLink">Tickets</a>
+  <span class="flex-1"></span>
+  <a mat-flat-button routerLink="/tickets/new">
+    <mat-icon>add</mat-icon>
+    <span i18n="@@layout.shell.newTicketButton">New ticket</span>
+  </a>
+</mat-toolbar>
+
+<main class="mx-auto max-w-6xl p-4 md:p-6">
+  <router-outlet />
+</main>

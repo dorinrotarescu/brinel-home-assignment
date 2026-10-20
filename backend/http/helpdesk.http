@@ -1,0 +1,92 @@
+@baseUrl = http://localhost:8080/api/helpdesk/v1
+
+### Get all persons
+GET {{baseUrl}}/persons
+
+### Get agents
+GET {{baseUrl}}/persons?role=AGENT
+
+### Search tickets (first page, newest first)
+POST {{baseUrl}}/tickets/search?page=0&size=10&sort=createdDate,desc
+Content-Type: application/json
+
+{}
+
+### Search tickets (open, high priority, title contains "laptop")
+POST {{baseUrl}}/tickets/search?page=0&size=10&sort=createdDate,desc
+Content-Type: application/json
+
+{
+  "status": "OPEN",
+  "priority": "HIGH",
+  "text": "laptop"
+}
+
+### Get ticket 2
+GET {{baseUrl}}/tickets/2
+
+### Create a ticket
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "title": "Keyboard keys stick",
+  "description": "Several keys on my keyboard stick since I spilled some coffee.",
+  "priority": "LOW",
+  "category": "HARDWARE",
+  "requesterId": 6
+}
+
+### Assign ticket 1 to agent 2
+PUT {{baseUrl}}/tickets/1/assignee
+Content-Type: application/json
+
+{
+  "assigneeId": 2
+}
+
+### Assign closed ticket 10 (409 Conflict)
+PUT {{baseUrl}}/tickets/10/assignee
+Content-Type: application/json
+
+{
+  "assigneeId": 2
+}
+
+### Get comments of ticket 2
+GET {{baseUrl}}/tickets/2/comments
+
+### Add a comment to ticket 2
+POST {{baseUrl}}/tickets/2/comments
+Content-Type: application/json
+
+{
+  "authorId": 5,
+  "content": "The problem is back after lunch."
+}
+
+### Status workflow (to be implemented)
+# These requests return 404 until the feature from ASSIGNMENT.md is built.
+
+### Change the status of ticket 2 without a comment
+PUT {{baseUrl}}/tickets/2/status
+Content-Type: application/json
+
+{
+  "status": "IN_PROGRESS",
+  "changedById": 1,
+  "comment": null
+}
+
+### Change the status of ticket 2 with a comment
+PUT {{baseUrl}}/tickets/2/status
+Content-Type: application/json
+
+{
+  "status": "RESOLVED",
+  "changedById": 1,
+  "comment": "Replaced the network cable."
+}
+
+### Get the status history of ticket 2
+GET {{baseUrl}}/tickets/2/history

@@ -1,0 +1,65 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title i18n="@@tickets.statusPanel.title">Status</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="flex flex-col gap-4 pt-4">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <app-status-chip [status]="ticket().status" />
+        <button
+          mat-flat-button
+          type="button"
+          [disabled]="history.isLoading() || unavailable()"
+          (click)="openChangeStatusDialog()"
+          i18n="@@tickets.statusPanel.changeButton"
+        >
+          Change status
+        </button>
+      </div>
+
+      <h3 class="m-0 text-base font-medium" i18n="@@tickets.statusPanel.historyTitle">History</h3>
+
+      @if (history.isLoading()) {
+        <mat-progress-bar mode="indeterminate" />
+      }
+
+      @if (unavailable()) {
+        <div class="flex items-start gap-2 rounded-md bg-blue-50 p-3 text-blue-900" role="status">
+          <mat-icon class="shrink-0" aria-hidden="true">info</mat-icon>
+          <p class="m-0" i18n="@@tickets.statusPanel.unavailable">Status changes are not available yet.</p>
+        </div>
+      } @else if (history.error()) {
+        <div class="flex flex-wrap items-center gap-4">
+          <p class="m-0" i18n="@@tickets.statusPanel.loadError">Could not load the status history</p>
+          <button mat-stroked-button type="button" (click)="history.reload()" i18n="@@tickets.statusPanel.retryButton">
+            Retry
+          </button>
+        </div>
+      } @else if (history.hasValue()) {
+        <ul class="m-0 flex list-none flex-col gap-4 p-0">
+          @for (change of history.value(); track change.id) {
+            <li class="flex flex-col gap-1 border-0 border-b border-solid border-gray-200 pb-4">
+              @if (change.fromStatus; as fromStatus) {
+                <span class="font-medium" i18n="@@tickets.statusPanel.transition">
+                  {{ statusLabel(fromStatus) }} → {{ statusLabel(change.toStatus) }}
+                </span>
+              } @else {
+                <span class="font-medium" i18n="@@tickets.statusPanel.createdAs">
+                  Created as {{ statusLabel(change.toStatus) }}
+                </span>
+              }
+              <span class="text-xs text-gray-600" i18n="@@tickets.statusPanel.changedBy">
+                by {{ change.changedBy.fullName }} · {{ change.changedDate | date: 'medium' }}
+              </span>
+              @if (change.comment) {
+                <p class="m-0 whitespace-pre-line text-gray-600">{{ change.comment }}</p>
+              }
+            </li>
+          } @empty {
+            <li class="text-gray-600" i18n="@@tickets.statusPanel.empty">No status changes yet.</li>
+          }
+        </ul>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,90 @@
+@if (ticketResource.isLoading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+
+@if (notFound()) {
+  <section class="flex flex-col items-start gap-4 py-8">
+    <h1 class="m-0" i18n="@@tickets.detail.notFoundTitle">Ticket not found</h1>
+    <p class="m-0" i18n="@@tickets.detail.notFoundMessage">Ticket #{{ id() }} does not exist.</p>
+    <a mat-stroked-button routerLink="/tickets" i18n="@@tickets.detail.backLink">Back to tickets</a>
+  </section>
+} @else if (ticketResource.error()) {
+  <section class="flex flex-wrap items-center gap-4 py-8">
+    <p class="m-0" i18n="@@tickets.detail.loadError">Could not load the ticket.</p>
+    <button mat-stroked-button type="button" (click)="ticketResource.reload()" i18n="@@tickets.detail.retryButton">
+      Retry
+    </button>
+  </section>
+} @else if (ticketResource.hasValue()) {
+  @let ticket = ticketResource.value();
+  <div class="grid gap-6 py-4 md:grid-cols-3">
+    <div class="flex flex-col gap-6 md:col-span-2">
+      <header class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1">
+          <span class="text-sm text-gray-600" i18n="@@tickets.detail.number">Ticket #{{ ticket.id }}</span>
+          <div class="flex flex-wrap items-center gap-3">
+            <h1 class="m-0">{{ ticket.title }}</h1>
+            <app-status-chip [status]="ticket.status" />
+          </div>
+        </div>
+        <dl class="m-0 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
+          <div>
+            <dt class="text-xs text-gray-600" i18n="@@tickets.detail.priorityLabel">Priority</dt>
+            <dd class="m-0">{{ priorityLabel(ticket.priority) }}</dd>
+          </div>
+          <div>
+            <dt class="text-xs text-gray-600" i18n="@@tickets.detail.categoryLabel">Category</dt>
+            <dd class="m-0">{{ categoryLabel(ticket.category) }}</dd>
+          </div>
+          <div>
+            <dt class="text-xs text-gray-600" i18n="@@tickets.detail.requesterLabel">Requester</dt>
+            <dd class="m-0">{{ ticket.requester.fullName }}</dd>
+          </div>
+          <div>
+            <dt class="text-xs text-gray-600" i18n="@@tickets.detail.createdLabel">Created</dt>
+            <dd class="m-0">{{ ticket.createdDate | date: 'medium' }}</dd>
+          </div>
+          <div>
+            <dt class="text-xs text-gray-600" i18n="@@tickets.detail.updatedLabel">Updated</dt>
+            <dd class="m-0">{{ ticket.updatedDate | date: 'medium' }}</dd>
+          </div>
+        </dl>
+      </header>
+
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title i18n="@@tickets.detail.descriptionTitle">Description</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="m-0 whitespace-pre-line pt-4">{{ ticket.description }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title i18n="@@tickets.detail.commentsTitle">Comments</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="pt-4">
+            <app-ticket-comments [ticketId]="id()" />
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <aside class="flex flex-col gap-6">
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title i18n="@@tickets.detail.assigneeTitle">Assignee</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="pt-4">
+            <app-ticket-assign [ticket]="ticket" (assigned)="ticketResource.reload()" />
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <app-ticket-status-panel [ticket]="ticket" (statusChanged)="ticketResource.reload()" />
+    </aside>
+  </div>
+}

@@ -1,0 +1,2 @@
+export const COMMENT_MAX_LENGTH = 1000;
+export const STATUS_COMMENT_MAX_LENGTH = 1000;

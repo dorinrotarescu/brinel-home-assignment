@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-4">
+  <p class="m-0">
+    @if (ticket().assignee; as assignee) {
+      <span class="font-medium">{{ assignee.fullName }}</span>
+    } @else {
+      <span class="text-gray-600" i18n="@@tickets.assign.unassigned">Unassigned</span>
+    }
+  </p>
+
+  <form class="flex flex-col gap-2" [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label i18n="@@tickets.assign.agentLabel">Agent</mat-label>
+      <mat-select formControlName="assigneeId">
+        @for (agent of agentOptions(); track agent.id) {
+          <mat-option [value]="agent.id">{{ agent.fullName }}</mat-option>
+        }
+      </mat-select>
+      @if (fieldError(form.controls.assigneeId); as error) {
+        <mat-error>{{ error }}</mat-error>
+      }
+    </mat-form-field>
+
+    <div>
+      <button mat-flat-button type="submit" [disabled]="submitting()" i18n="@@tickets.assign.submitButton">
+        Assign
+      </button>
+    </div>
+  </form>
+</div>

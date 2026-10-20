@@ -1,0 +1,57 @@
+<div class="flex flex-col gap-6">
+  @if (comments.isLoading()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  @if (comments.error()) {
+    <div class="flex flex-wrap items-center gap-4">
+      <p class="m-0" i18n="@@tickets.comments.loadError">Could not load the comments.</p>
+      <button mat-stroked-button type="button" (click)="comments.reload()" i18n="@@tickets.comments.retryButton">
+        Retry
+      </button>
+    </div>
+  } @else if (comments.hasValue()) {
+    <ul class="m-0 flex list-none flex-col gap-4 p-0">
+      @for (comment of comments.value(); track comment.id) {
+        <li class="flex flex-col gap-1 border-0 border-b border-solid border-gray-200 pb-4">
+          <div class="flex flex-wrap items-baseline gap-2">
+            <span class="font-medium">{{ comment.author.fullName }}</span>
+            <span class="text-xs text-gray-600">{{ comment.createdDate | date: 'medium' }}</span>
+          </div>
+          <p class="m-0 whitespace-pre-line">{{ comment.content }}</p>
+        </li>
+      } @empty {
+        <li class="text-gray-600" i18n="@@tickets.comments.empty">No comments yet.</li>
+      }
+    </ul>
+  }
+
+  <form class="flex flex-col gap-2" [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label i18n="@@tickets.comments.authorLabel">Author</mat-label>
+      <mat-select formControlName="authorId">
+        @for (person of peopleOptions(); track person.id) {
+          <mat-option [value]="person.id">{{ personLabel(person) }}</mat-option>
+        }
+      </mat-select>
+      @if (fieldError(form.controls.authorId); as error) {
+        <mat-error>{{ error }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label i18n="@@tickets.comments.contentLabel">Comment</mat-label>
+      <textarea matInput formControlName="content" rows="4"></textarea>
+      <mat-hint align="end">{{ form.controls.content.value.length }} / {{ maxLength }}</mat-hint>
+      @if (fieldError(form.controls.content); as error) {
+        <mat-error>{{ error }}</mat-error>
+      }
+    </mat-form-field>
+
+    <div>
+      <button mat-flat-button type="submit" [disabled]="submitting()" i18n="@@tickets.comments.submitButton">
+        Add comment
+      </button>
+    </div>
+  </form>
+</div>
