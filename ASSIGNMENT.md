@@ -128,6 +128,10 @@ Only once everything above is done:
 
 - Record the creation of a ticket as its first history entry (`fromStatus: null`, `toStatus: "OPEN"`). The UI already shows such an entry as "Created as Open".
 
+## If it takes too long
+
+If the assignment is taking much longer than expected, you don't have to finish everything. Submit what you have and, in the pull request section *What I would do with more time*, list what is missing and estimate how long the remaining work would take you.
+
 ## How to submit
 
 > Don't use the **Fork** button. On GitHub, a fork of a public repository is always public and can't be made private.
