@@ -198,7 +198,7 @@ Check that your paths and JSON fields match ASSIGNMENT.md exactly, then reload t
 Submit what you have. In your pull request, list what is missing and how you would do it. A smaller solution that works and has tests is better than a bigger one that doesn't.
 
 **Something is unclear in the assignment.**
-Make a reasonable choice and write it down in your pull request. If you are blocked, contact us at `<contact email>`.
+Make a reasonable choice and write it down in your pull request. If you are blocked, contact us at dorin.rotarescu@brinel.com.
 
 ### Troubleshooting
 

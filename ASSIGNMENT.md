@@ -130,6 +130,8 @@ Only once everything above is done:
 
 ## If it takes too long
 
+The assignment should take around 2-4 hours of work.
+
 If the assignment is taking much longer than expected, you don't have to finish everything. Submit what you have and, in the pull request section *What I would do with more time*, list what is missing and estimate how long the remaining work would take you.
 
 ## How to submit
